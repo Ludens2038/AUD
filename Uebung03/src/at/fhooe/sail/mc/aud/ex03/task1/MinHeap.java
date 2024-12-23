@@ -20,9 +20,7 @@ public class MinHeap<T extends Comparable<T>> implements MyMinHeap<T>{
 
     private void upHeap(int index) {
 
-        int up = parent(index);
-
-        if (up < 0) {
+        if (index == 0) {
             return;
         }
 
@@ -33,21 +31,21 @@ public class MinHeap<T extends Comparable<T>> implements MyMinHeap<T>{
     }
 
     private void downHeap(int index) {
+        int left = leftChild(index);
+        int right = rightChild(index);
+        int smallest = index;
 
-        if (size < this.leftChild(index) || size < this.rightChild(index)) {
-            return;
+        if (left < size && heap[left].compareTo(heap[smallest]) < 0) {
+            smallest = left;
         }
 
-        if (heap[leftChild(index)].compareTo(heap[rightChild(index)]) < 0 ) {
-            int down = leftChild(index);
-            swap(index, leftChild(index));
-            downHeap(down);
-        } else if (heap[leftChild(index)].compareTo(heap[rightChild(index)]) > 0) {
-            int down = rightChild(index);
-            swap(index, rightChild(index));
-            downHeap(down);
-        } else {
-            return;
+        if (right < size && heap[right].compareTo(heap[smallest]) < 0) {
+            smallest = right;
+        }
+
+        if (smallest != index) {
+            swap(index, smallest);
+            downHeap(smallest);
         }
     }
 
@@ -140,11 +138,10 @@ public class MinHeap<T extends Comparable<T>> implements MyMinHeap<T>{
         return o;
     }
 
-    /**
-     * Se beginining of se tasque 2
-     */
+    /***********************************************************************
+     * Task 2 startes HERE**************************************************
+     ***********************************************************************/
 
-    // muss in place sein, bototm up heap aus den folien umsetzen
     public MinHeap(T list[]) throws IllegalArgumentException {
 
         if (list == null) {
@@ -154,9 +151,9 @@ public class MinHeap<T extends Comparable<T>> implements MyMinHeap<T>{
         this.heap = list;
         this.size = list.length;
 
-        int leaves = (list.length + 1) / 2;
+        int start = (this.size/2) - 1;
 
-        for(int i = leaves - 1; i >= 0; i--) {
+        for(int i = start; i >= 0; i--) {
             this.downHeap(i);
         }
 
@@ -186,7 +183,11 @@ public class MinHeap<T extends Comparable<T>> implements MyMinHeap<T>{
             throw new IllegalArgumentException();
         }
 
+        MinHeap<T> heap = new MinHeap<>(list);
 
+        for (int i = 0; i < list.length; i++) {
+            heap.removeMin();
+        }
 
     }
 }
