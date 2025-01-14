@@ -237,11 +237,21 @@ public class AVLTree<T extends Comparable<T>> {
     private void rotateLeft(AVLNode<T> n) {
         AVLNode<T> newRoot = n.right; //new root is the right child of the current node n
         n.right = newRoot.left; //the left child of the new root becomes
-        if (newRoot.left != null) newRoot.left.parent = n; //update the parent of the left child of the new root
+
+        if (newRoot.left != null) {
+            newRoot.left.parent = n; //update the parent of the left child of the new root
+        }
+
         newRoot.parent = n.parent; //update the parent of the new root
-        if (n.parent == null) root = newRoot; //if the current node n is the root, the new root becomes the root
-        else if (n == n.parent.left) n.parent.left = newRoot; //if the current node n is the left child of its parent, the new root becomes the left child of the parent
-        else n.parent.right = newRoot; //if the current node n is the right child of its parent, the new root becomes
+
+        if (n.parent == null) {
+            root = newRoot; //if the current node n is the root, the new root becomes the root
+        } else if (n == n.parent.left) {
+            n.parent.left = newRoot; //if the current node n is the left child of its parent, the new root becomes the left child of the parent
+        } else {
+            n.parent.right = newRoot; //if the current node n is the right child of its parent, the new root becomes
+        }
+
         newRoot.left = n; //the current node n becomes the left child of the new root
         n.parent = newRoot; //the new root becomes the parent of the current node n
         updateHeights(n); //update the heights of the nodes
@@ -250,11 +260,21 @@ public class AVLTree<T extends Comparable<T>> {
     private void rotateRight(AVLNode<T> n) {
         AVLNode<T> newRoot = n.left; //new root is the left child of the current node n
         n.left = newRoot.right; //the right child of the new root becomes
-        if (newRoot.right != null) newRoot.right.parent = n; //update the parent of the right child of the new root
+
+        if (newRoot.right != null) {
+            newRoot.right.parent = n; //update the parent of the right child of the new root
+        }
+
         newRoot.parent = n.parent; //update the parent of the new root
-        if (n.parent == null) root = newRoot; //if the current node n is the root, the new root becomes the root
-        else if (n == n.parent.right) n.parent.right = newRoot; //if the current node n is the right child of its parent, the new root becomes
-        else n.parent.left = newRoot; //if the current node n is the left child of its parent, the new root becomes the left child of the parent
+
+        if (n.parent == null) {
+            root = newRoot; //if the current node n is the root, the new root becomes the root
+        } else if (n == n.parent.right) {
+            n.parent.right = newRoot; //if the current node n is the right child of its parent, the new root becomes
+        } else {
+            n.parent.left = newRoot; //if the current node n is the left child of its parent, the new root becomes the left child of the parent
+        }
+
         newRoot.right = n; //the current node n becomes the right child of the new root
         n.parent = newRoot; //the new root becomes the parent of the current node n
         updateHeights(n); //update the heights of the nodes
@@ -268,7 +288,10 @@ public class AVLTree<T extends Comparable<T>> {
         int leftHeight = height(n.left); //height of the left subtree
         int rightHeight = height(n.right); //height of the right subtree
         int balanceFactor = leftHeight - rightHeight; //balance factor of the current node n
-        if (balanceFactor < 0) balanceFactor = -balanceFactor; //absolute value of the balance factor
+
+        if (balanceFactor < 0) {
+            balanceFactor = -balanceFactor; //absolute value of the balance factor
+        }
 
         if (balanceFactor > 1) { //if the balance factor is greater than 1, the tree is not balanced
             return false;
@@ -281,11 +304,13 @@ public class AVLTree<T extends Comparable<T>> {
         while (n != null) {
             int leftHeight = height(n.left); //height of the left subtree
             int rightHeight = height(n.right); //height of the right subtree
+
             if (leftHeight > rightHeight) { //update the height of the current node n
                 n.height = leftHeight + 1;
             } else { //update the height of the current node n
                 n.height = rightHeight + 1;
             }
+
             n = n.parent;
         }
     }
