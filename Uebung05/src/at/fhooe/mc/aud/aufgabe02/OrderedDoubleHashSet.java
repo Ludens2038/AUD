@@ -2,16 +2,13 @@ package at.fhooe.mc.aud.aufgabe02;
 
 import at.fhooe.mc.aud.myhashset.MyHashSet;
 
-// ordere doublehashing (kleinere hat vorrang, dh beim vergliech wird kleinere eigesetzt, die größere wird weitergegeben)
 public class OrderedDoubleHashSet implements MyHashSet {
     Object[] table;
-    int[] deletionCheck;
     int size;
     int entries;
 
     public OrderedDoubleHashSet(int size) {
         this.table = new Object[size];
-        this.deletionCheck = new int[size];
         this.size = size;
         this.entries = 0;
     }
@@ -33,17 +30,30 @@ public class OrderedDoubleHashSet implements MyHashSet {
             return false;
         }
 
+        if (contains(key)) {
+            return false;
+        }
+
+        //start of insertion
         int h1 = key.hashCode() % this.size;
         int h2 = 1 + key.hashCode() % 5;
 
-        while (this.table != null) {
-            h1 = (h1 + h2) % entries;
+        Object current = key;
+        Object swapper = null;
+        int currentHash = current.hashCode();
+
+        while (this.table[h1] != null) {
+            if (this.table[h1].hashCode() > currentHash) {
+                swapper = this.table[h1];
+                this.table[h1] = current;
+                current = swapper;
+                currentHash = current.hashCode();
+            }
+            h1 = (h1 + h2) % this.size;
         }
 
-        if (deletionCheck[h1] == 0) {
-            this.table[h1] = key;
-            this.deletionCheck[h1] = 1;
-        }
+        this.table[h1] = current;
+        this.entries++;
 
         return true;
     }
@@ -59,25 +69,35 @@ public class OrderedDoubleHashSet implements MyHashSet {
         int h2 = 1 + key.hashCode() % 5;
         boolean found = false;
 
-        while (this.table != null) {
-            h1 = (h1 + h2) % entries;
-            if (key.equals(this.table[h1]) && deletionCheck[h1] == 1) {
+        while (this.table[h1] != null) {
+            if (key.equals(this.table[h1])) {
                 found = true;
                 break;
             }
+            h1 = (h1 + h2) % this.size;
         }
         return found;
     }
 
     @Override
     public boolean remove(Object key) throws IllegalArgumentException {
+        int h1 = key.hashCode() % this.size;
+        int h2 = 1 + key.hashCode() % 5;
 
-
+        while (this.table[h1] != null) {
+            if (key.equals(this.table[h1])) {
+                this.table[h1] = null;
+                return true;
+            }
+            h1 = (h1 + h2) % entries;
+        }
         return false;
     }
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < this.table.length; i++) {
+            this.table[i] = null;
+        }
     }
 }
