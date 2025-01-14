@@ -3,9 +3,9 @@ package at.fhooe.mc.aud.aufgabe02;
 import at.fhooe.mc.aud.myhashset.MyHashSet;
 
 public class OrderedDoubleHashSet implements MyHashSet {
-    Object[] table;
-    int size;
-    int entries;
+    public Object[] table; //change to private after testing
+    public int size;
+    public int entries;
 
     public OrderedDoubleHashSet(int size) {
         this.table = new Object[size];
@@ -48,6 +48,7 @@ public class OrderedDoubleHashSet implements MyHashSet {
                 this.table[h1] = current;
                 current = swapper;
                 currentHash = current.hashCode();
+                h1 = currentHash % this.size;
             }
             h1 = (h1 + h2) % this.size;
         }
@@ -67,16 +68,15 @@ public class OrderedDoubleHashSet implements MyHashSet {
 
         int h1 = key.hashCode() % this.size;
         int h2 = 1 + key.hashCode() % 5;
-        boolean found = false;
 
         while (this.table[h1] != null) {
-            if (key.equals(this.table[h1])) {
-                found = true;
-                break;
+            if (key.hashCode() == this.table[h1].hashCode()) {
+                return true;
+            } else {
+                h1 = (h1 + h2) % this.size;
             }
-            h1 = (h1 + h2) % this.size;
         }
-        return found;
+        return false;
     }
 
     @Override
