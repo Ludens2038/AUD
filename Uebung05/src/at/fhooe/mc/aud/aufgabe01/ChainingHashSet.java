@@ -7,16 +7,19 @@ import java.util.LinkedList;
 public class ChainingHashSet implements MyHashSet {
 
     private LinkedList[] table;
-    private int size;
+    private int tableSize;
 
     public ChainingHashSet(int size) {
         this.table = new LinkedList[size];
-        this.size = size;
+        for (int i = 0; i < size; i++) {
+            table[i] = new LinkedList();
+        }
+        this.tableSize = size;
     }
 
     @Override
     public int size() {
-        return this.size;
+        return this.tableSize;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class ChainingHashSet implements MyHashSet {
         }
 
         if (!contains(key)) {
-            table[key.hashCode() % this.size].add(key);
+            table[key.hashCode() % this.tableSize].add(key);
             return true;
         }
         return false;
@@ -38,7 +41,7 @@ public class ChainingHashSet implements MyHashSet {
             throw new IllegalArgumentException("given key is null");
         }
 
-        return table[key.hashCode() % this.size].contains(key);
+        return table[key.hashCode() % this.tableSize].contains(key);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class ChainingHashSet implements MyHashSet {
             throw new IllegalArgumentException("given key is null");
         }
 
-        int hashKey = key.hashCode() % this.size;
+        int hashKey = key.hashCode() % this.tableSize;
 
         if (table[hashKey].contains(key)) {
             return table[hashKey].remove(key);
@@ -59,8 +62,8 @@ public class ChainingHashSet implements MyHashSet {
 
     @Override
     public void clear() {
-        for (int i = 0; i < this.size; i++) {
-            table[i] = null;
+        for (int i = 0; i < this.table.length; i++) {
+            this.table[i].clear();
         }
     }
 }
