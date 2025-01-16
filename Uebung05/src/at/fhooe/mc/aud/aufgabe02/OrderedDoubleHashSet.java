@@ -3,9 +3,11 @@ package at.fhooe.mc.aud.aufgabe02;
 import at.fhooe.mc.aud.myhashset.MyHashSet;
 
 public class OrderedDoubleHashSet implements MyHashSet {
-    public Object[] table; //change to private after testing
-    public int size;
-    public int entries;
+    private Object[] table; //change to private after testing
+    private int size;
+    private int entries;
+
+    Deleted d = new Deleted();
 
     public OrderedDoubleHashSet(int size) {
         this.table = new Object[size];
@@ -36,7 +38,7 @@ public class OrderedDoubleHashSet implements MyHashSet {
 
         //start of insertion
         int h1 = key.hashCode() % this.size;
-        int h2 = 1 + key.hashCode() % 5;
+        int h2 = 1 + (key.hashCode() % 5);
 
         Object current = key;
         Object swapper = null;
@@ -48,7 +50,7 @@ public class OrderedDoubleHashSet implements MyHashSet {
                 this.table[h1] = current;
                 current = swapper;
                 currentHash = current.hashCode();
-                h1 = currentHash % this.size;
+                h2 = 1 + (currentHash % 5);
             }
             h1 = (h1 + h2) % this.size;
         }
@@ -70,7 +72,7 @@ public class OrderedDoubleHashSet implements MyHashSet {
         int h2 = 1 + key.hashCode() % 5;
 
         while (this.table[h1] != null) {
-            if (key.hashCode() == this.table[h1].hashCode()) {
+            if (key.equals(this.table[h1])) {
                 return true;
             } else {
                 h1 = (h1 + h2) % this.size;
@@ -81,15 +83,20 @@ public class OrderedDoubleHashSet implements MyHashSet {
 
     @Override
     public boolean remove(Object key) throws IllegalArgumentException {
+
+        if (key == null) {
+            throw new IllegalArgumentException("given key is null");
+        }
+
         int h1 = key.hashCode() % this.size;
         int h2 = 1 + key.hashCode() % 5;
 
         while (this.table[h1] != null) {
             if (key.equals(this.table[h1])) {
-                this.table[h1] = null;
+                this.table[h1] = d;
                 return true;
             }
-            h1 = (h1 + h2) % entries;
+            h1 = (h1 + h2) % this.size;
         }
         return false;
     }
@@ -99,5 +106,6 @@ public class OrderedDoubleHashSet implements MyHashSet {
         for (int i = 0; i < this.table.length; i++) {
             this.table[i] = null;
         }
+        this.entries = 0;
     }
 }
