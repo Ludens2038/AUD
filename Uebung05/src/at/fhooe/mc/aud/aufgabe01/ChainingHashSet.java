@@ -61,6 +61,18 @@ public class ChainingHashSet implements MyHashSet {
     }
 
     @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ChainingHashSet: \n");
+        for (int i = 0; i < this.table.length; i++) {
+            builder.append(i + ": " + this.table[i].toString() + "\n");
+        }
+        return builder.toString();
+    }
+
+
+
+    @Override
     public void clear() {
         for (int i = 0; i < this.table.length; i++) {
             this.table[i].clear();

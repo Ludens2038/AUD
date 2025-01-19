@@ -1,3 +1,4 @@
+import at.fhooe.mc.aud.aufgabe02.Deleted;
 import at.fhooe.mc.aud.aufgabe02.OrderedDoubleHashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,10 @@ public class OrderedDoubleHashSetTest {
     void testContains() {
         assertFalse(empty.contains(7));
         assertTrue(filled.contains(7));
+
+        filled.remove(12);
+        assertFalse(filled.contains(12));
+        assertTrue(filled.contains(33));
     }
 
     @Test
@@ -54,6 +59,30 @@ public class OrderedDoubleHashSetTest {
         assertFalse(filled.contains(33));
         assertFalse(filled.contains(19));
         assertFalse(filled.contains(12));
+    }
+
+    @Test
+    void testRemove() {
+        assertFalse(empty.remove(7));
+        filled.remove(12);
+        assertTrue(filled.remove(33));
+        filled.insert(12);
+        assertFalse(filled.remove(17));
+    }
+
+    @Test
+    void testToString() {
+        filled.remove(12);
+        String expected = "OrderedDoubleHashSet: \n" +
+                "0: 7\n" +
+                "1: 1\n" +
+                "2: 2\n" +
+                "3: 19\n" +
+                "4: null\n" +
+                "5: Deleted\n" +
+                "6: 33\n";
+
+        assertEquals(expected, filled.toString());
     }
 
     @Test

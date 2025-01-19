@@ -95,6 +95,26 @@ class ChainingHashSetTest {
     }
 
     @Test
+    public void testToString() {
+        filled.insert(8);
+        filled.insert(9);
+        filled.insert(10);
+        filled.insert(11);
+        filled.insert(12);
+
+        String expected = "ChainingHashSet: \n" +
+                "0: [7]\n" +
+                "1: [1, 8]\n" +
+                "2: [2, 9]\n" +
+                "3: [3, 10]\n" +
+                "4: [4, 11]\n" +
+                "5: [5, 12]\n" +
+                "6: [6]\n";
+
+        assertEquals(expected, filled.toString());
+    }
+
+    @Test
     public void testInsertNullException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             empty.insert(null);
