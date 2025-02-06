@@ -78,4 +78,24 @@ public class ChainingHashSet implements MyHashSet {
             this.table[i].clear();
         }
     }
+
+    public static void main(String[] args) {
+        ChainingHashSet filled = new ChainingHashSet(7);
+        filled.insert(1);
+        filled.insert(2);
+        filled.insert(3);
+        filled.insert(4);
+        filled.insert(5);
+        filled.insert(6);
+        filled.insert(7);
+        filled.insert(8);
+        filled.insert(9);
+        filled.insert(10);
+        filled.insert(11);
+        filled.insert(12);
+
+        System.out.println(filled.toString());
+
+    }
+
 }
